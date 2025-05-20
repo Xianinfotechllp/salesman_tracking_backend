@@ -42,6 +42,9 @@ async function checkIn(salesman, location, file) {
     // instead of this we will use all file types now | shan
 
     if (file) {
+
+      console.log("Uploaded file mimetype:", file.mimetype);
+      
     if (!file.mimetype.startsWith("image/")) {
     throw new ApiError(400, "Invalid file type. Only image files are allowed.");
   }
