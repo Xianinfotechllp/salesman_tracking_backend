@@ -33,7 +33,20 @@ async function handleUserRegistration(req, res) {
     });
 
     await newUser.save();
-    res.status(201).json({ message: "User successfully registered!" });
+
+    const user = {
+      _id: newUser._id,
+      name: newUser.name,
+      email: newUser.email,
+      mobileNumber: newUser.mobileNumber,
+      accountProvider: newUser.accountProvider,
+    };
+
+    res.status(201).json({
+      message: "User successfully registered!",
+      user,
+    });
+    
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error, please try again later." });
