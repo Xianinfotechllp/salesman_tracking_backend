@@ -29,15 +29,23 @@ async function checkIn(salesman, location, file) {
     throw new ApiError(404, "Salesman not found");
   }
   try {
-    if (file) {
+    // if (file) {
       
-      const allowedMimeTypes = ["image/jpeg", "image/png", "image/webp"];
-      if (!allowedMimeTypes.includes(file.mimetype)) {
-        throw new ApiError(
-          400,
-          "Invalid file type. Only JPEG, PNG, and WEBP images are allowed."
-        );
-      }
+    //   const allowedMimeTypes = ["image/jpeg", "image/png", "image/webp"];
+    //   if (!allowedMimeTypes.includes(file.mimetype)) {
+    //     throw new ApiError(
+    //       400,
+    //       "Invalid file type. Only JPEG, PNG, and WEBP images are allowed."
+    //     );
+    //   }
+
+    // instead of this we will use all file types now | shan
+
+    if (file) {
+    if (!file.mimetype.startsWith("image/")) {
+    throw new ApiError(400, "Invalid file type. Only image files are allowed.");
+  }
+
 
       
       const result = await cloudinary.v2.uploader.upload(file.path, {
