@@ -26,10 +26,10 @@ const clientSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
-    ordersPlaced: {
-      type: Number,
-      default: 0,
-    },
+    // ordersPlaced: {
+    //   type: Number,        // removed order placed field cz it is causing problem in frontend
+    //   default: 0,
+    // },
     branches: [
       {
         branchName: { type: String, required: true },
