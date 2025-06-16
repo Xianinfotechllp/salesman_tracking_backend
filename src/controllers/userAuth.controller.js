@@ -10,6 +10,7 @@ const SECRET_KEY = process.env.JWT_SECRET;
 async function handleUserRegistration(req, res) {
   const { name, mobileNumber, email, password, accountProvider } = req.body;
   console.log(req.body);
+
   if (!name || !mobileNumber || !password) {
     return res.status(400).json({ message: "All fields are required!" });
   }
@@ -34,22 +35,34 @@ async function handleUserRegistration(req, res) {
 
     await newUser.save();
 
-    const user = {
-      _id: newUser._id,
+    // ------------------------------
+    // ✅ JWT Token Generation (Aligned with login)
+    // ------------------------------
+    const tokenPayload = {
+      id: newUser._id,
       name: newUser.name,
-      email: newUser.email,
-      mobileNumber: newUser.mobileNumber,
-      accountProvider: newUser.accountProvider,
     };
 
-    res.status(201).json({
+    const token = jwt.sign(tokenPayload, SECRET_KEY, { expiresIn: "8h" });
+
+    // ------------------------------
+    // ✅ Respond with user data and token
+    // ------------------------------
+    return res.status(201).json({
       message: "User successfully registered!",
-      user,
+      user: {
+        id: newUser._id,
+        name: newUser.name,
+        email: newUser.email,
+        mobileNumber: newUser.mobileNumber,
+        accountProvider: newUser.accountProvider,
+      },
+      token,
     });
-    
+
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error, please try again later." });
+    return res.status(500).json({ message: "Server error, please try again later." });
   }
 }
 
